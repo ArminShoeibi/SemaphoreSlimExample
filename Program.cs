@@ -11,7 +11,7 @@ for (int i = 0; i < 200; i++)
 }
 await Task.Delay(TimeSpan.FromSeconds(5));
 
-await Parallel.ForEachAsync(accessTokenProviders, async (accessTokenProvider, cancellationToken) => 
+await Parallel.ForEachAsync(accessTokenProviders, async (accessTokenProvider, cancellationToken) =>
 {
     await accessTokenProvider.M();
 });
@@ -21,16 +21,17 @@ Console.ReadLine();
 
 class AccessTokenProvider
 {
-    public int Index { get; set; }
+
+    private readonly static SemaphoreSlim _semaphoreSlim = new(1, 1);
+    private static string AccessToken = "";
 
     public AccessTokenProvider(int index)
     {
         Index = index;
         Console.WriteLine(Index);
     }
+    public int Index { get; set; }
 
-    private readonly static SemaphoreSlim _semaphoreSlim = new(1, 1);
-    private static string AccessToken = "";
     public async Task M()
     {
         Console.WriteLine(Index);
@@ -47,6 +48,7 @@ class AccessTokenProvider
                 // DOUBLE CHECK: Prevent setting acess token again because of multi threads.
                 if (string.IsNullOrWhiteSpace(AccessToken) is false)
                 {
+
                     Console.WriteLine($"Access token already exists, BeforeWaitAsync: {false}");
                     return;
                 }
