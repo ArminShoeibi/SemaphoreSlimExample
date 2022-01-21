@@ -5,10 +5,9 @@ Console.WriteLine("Hello, World!");
 
 List<AccessTokenProvider> accessTokenProviders = new();
 
-for (int i = 0; i < 100; i++)
+for (int i = 0; i < 200; i++)
 {
-    Console.WriteLine(i);
-    accessTokenProviders.Add(new());
+    accessTokenProviders.Add(new(i));
 }
 await Task.Delay(TimeSpan.FromSeconds(5));
 
@@ -22,10 +21,19 @@ Console.ReadLine();
 
 class AccessTokenProvider
 {
+    public int Index { get; set; }
+
+    public AccessTokenProvider(int index)
+    {
+        Index = index;
+        Console.WriteLine(Index);
+    }
+
     private readonly static SemaphoreSlim _semaphoreSlim = new(1, 1);
     private static string AccessToken = "";
     public async Task M()
     {
+        Console.WriteLine(Index);
         if (string.IsNullOrWhiteSpace(AccessToken) is false)
         {
             Console.WriteLine($"Access token already exists, BeforeWaitAsync: {true}");
@@ -43,7 +51,7 @@ class AccessTokenProvider
                     return;
                 }
 
-                Console.WriteLine("Setting Access Token into Memory Cache. (Just one time every 45 minutes)");
+                Console.WriteLine("Setting Access Token. (Just one time)");
                 AccessToken = Guid.NewGuid().ToString("N");
                 return;
             }
