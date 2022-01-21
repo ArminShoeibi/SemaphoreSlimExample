@@ -51,7 +51,10 @@ class AccessTokenProvider
                     return;
                 }
 
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Setting Access Token. (Just one time)");
+                Console.ResetColor();
+
                 AccessToken = Guid.NewGuid().ToString("N");
                 return;
             }
