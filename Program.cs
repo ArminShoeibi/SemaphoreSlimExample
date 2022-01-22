@@ -58,7 +58,6 @@ class AccessTokenProvider
                 Console.ResetColor();
 
                 AccessToken = Guid.NewGuid().ToString("N");
-                return;
             }
             finally
             {
